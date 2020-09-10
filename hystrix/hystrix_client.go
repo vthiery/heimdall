@@ -211,14 +211,17 @@ outter:
 			ctx, cancel := context.WithTimeout(context.Background(), backoffTime)
 
 			select {
+			case <-request.Context().Done():
+				cancel()
+
+				// If the request context has been cancelled, don't retry
+				err = request.Context().Err()
+				break outter
+
 			case <-ctx.Done():
 				cancel()
-				continue
 
-			case <-request.Context().Done():
-				// If the request context has already been cancelled, don't retry
-				cancel()
-				break outter
+				continue
 			}
 		}
 

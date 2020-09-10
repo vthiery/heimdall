@@ -164,11 +164,16 @@ outter:
 			select {
 			case <-ctx.Done():
 				cancel()
+
 				continue
 
 			case <-request.Context().Done():
-				// If the request context has already been cancelled, don't retry
 				cancel()
+
+				multiErr.Push(request.Context().Err().Error())
+				c.reportError(request, err)
+
+				// If the request context has already been cancelled, don't retry
 				break outter
 			}
 		}
