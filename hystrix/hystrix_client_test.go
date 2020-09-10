@@ -346,7 +346,7 @@ func BenchmarkHystrixHTTPClientRetriesGetOnFailure(b *testing.B) {
 }
 
 func TestHystrixHTTPClientDontRetryWhenContextIsCancelled(t *testing.T) {
-	t.Skip("Concurrency issues... to be fixed in hystrix")
+	t.Skip("Skip: concurrency issues... to be fixed in hystrix")
 
 	count := 0
 	noOfRetries := 3
